@@ -10,13 +10,13 @@ type TLoginBody = {
 };
 
 interface IAuthController {
-  signUp: RequestHandler<
+  register: RequestHandler<
     null,
     TUserWithoutPassword | ResponseError,
     TUser,
     null
   >;
-  signIn: RequestHandler<
+  login: RequestHandler<
     null,
     TUserWithoutPassword | ResponseError,
     TLoginBody,
