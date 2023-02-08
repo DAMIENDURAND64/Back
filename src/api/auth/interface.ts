@@ -1,8 +1,8 @@
 import { TUser, User } from "./../../models/user";
 import { RequestHandler } from "express";
-import ResponseError from "../responseError";
+import ResponseError from "../../utils/responseError";
 
-type TUserWithoutPassword = Omit<TUser, "password">;
+export type TUserWithoutPassword = Omit<TUser, "password">;
 
 type TLoginBody = {
   email: string;
