@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
+import { sign } from "jsonwebtoken";
 import { User } from "../../../models/user";
+import getSecretKey from "../../../utils/auth";
 import IAuthController from "../interface";
 
 const signIn: IAuthController["signIn"] = async (req, res, next) => {
@@ -7,12 +9,23 @@ const signIn: IAuthController["signIn"] = async (req, res, next) => {
   try {
     const user = await User.findOne({ email }).exec();
     if (!user) {
-      return res.status(400).send({ message: "The username does not exist" });
+      return res.status(404).send({ message: "The username does not exist" });
     }
     if (!bcrypt.compareSync(password, user.password)) {
-      return res.status(400).send({ message: "The password is invalid" });
+      return res.status(403).send({ message: "The password is invalid" });
     }
-    res.send({ message: "The username and password combination is correct!" });
+
+    const secret = getSecretKey();
+
+    // password match
+    const { password: _, ...userWithoutPassword } = user.toObject();
+    const token = sign({ ...userWithoutPassword }, secret);
+
+    res.setHeader("authorization", `Bearer ${token}`);
+
+    return res.status(200).json({
+      ...userWithoutPassword,
+    });
   } catch (error) {
     res.status(500).send({ message: error });
     next(error);

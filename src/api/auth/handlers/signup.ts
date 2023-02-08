@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../../../models/user";
+import getSecretKey from "../../../utils/auth";
 import IAuthController from "../interface";
 
 const signUp: IAuthController["signUp"] = async (req, res) => {
@@ -18,6 +19,13 @@ const signUp: IAuthController["signUp"] = async (req, res) => {
     const newUser = (await userModel.save()).toObject();
 
     const { password: removedPassword, ...userWithoutPassword } = newUser;
+
+    const secret = getSecretKey();
+
+    const token = jwt.sign(userWithoutPassword, secret, {
+      expiresIn: "10m",
+    });
+    res.setHeader("Authorization", `Bearer ${token}`);
 
     res.status(200).json(userWithoutPassword);
   } catch (error) {
