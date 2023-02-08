@@ -5,7 +5,7 @@ import { TUserWithoutPassword } from "../../auth/interface";
 
 const checkToken = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-
+  console.log(token);
   if (!token) {
     return res.status(403).json({ message: "You need to login first !" });
   }
@@ -17,6 +17,7 @@ const checkToken = async (req: Request, res: Response, next: NextFunction) => {
   if (typeof decodedToken === "string") {
     throw new Error(decodedToken);
   }
+  console.log(user);
 
   req.user = decodedToken as TUserWithoutPassword;
 
