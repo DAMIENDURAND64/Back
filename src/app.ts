@@ -1,63 +1,28 @@
-import mongoose, { Schema, model, connect } from 'mongoose';
-
 import express from "express";
-import connectDb from './services/mongoose';
+import api from "./api";
+import connectDb from "./services/mongoose";
+
+connectDb()
+  .then(() => console.log("Db connected"))
+  .catch((err) => console.log(err));
 
 const app = express();
-
-connectDb().catch(err => console.log(err))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use("/api/v1", api);
 
-// 1. Create an interface representing a document in MongoDB.
-interface IUser {
-  name: string;
-  email: string;
-  avatar?: string;
-}
-
-// 2. Create a Schema corresponding to the document interface.
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-});
-
-// 3. Create a Model.
-const User = mongoose.model<IUser>('Uuuuser', userSchema);
-
-run().catch(err => console.log(err));
-
-async function run() {
-  // 4. Connect to MongoDB
-  await connect(process.env.DATABASE_URI as string);
-
-  
-  const user = new User({
-    name: 'Bill',
-    email: 'bill@initech.com',
-  });
-  await user.save();
-
-  console.log(user.email); // 'bill@initech.com'
-}
-
-
-
-app.post('/user', async (req, res) => {
-  const user = new User({
-    name: req.body.name,
-    email: req.body.email
-  });
-
+/* app.get("/users", async (req, res) => {
+  console.log("ICI");
   try {
-    const result = await user.save();
-    res.status(200).send(result);
+    const users = await User.find();
+    console.log(users);
+    res.status(200).json(users);
   } catch (error) {
-    res.status(400).send({ message: error});
+    console.log(error);
+    res.status(500).json({ message: error });
   }
-});
+}); */
 
-
-export default app
+export default app;
