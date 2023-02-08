@@ -4,7 +4,7 @@ import { User } from "../../../models/user";
 import getSecretKey from "../../../utils/auth";
 import IAuthController from "../interface";
 
-const signUp: IAuthController["signUp"] = async (req, res) => {
+const register: IAuthController["register"] = async (req, res) => {
   const { password, lastName, firstName, email } = req.body;
   try {
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -33,4 +33,4 @@ const signUp: IAuthController["signUp"] = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
-export default signUp;
+export default register;

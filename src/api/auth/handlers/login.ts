@@ -4,7 +4,7 @@ import { User } from "../../../models/user";
 import getSecretKey from "../../../utils/auth";
 import IAuthController from "../interface";
 
-const signIn: IAuthController["signIn"] = async (req, res, next) => {
+const login: IAuthController["login"] = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email }).exec();
@@ -31,4 +31,4 @@ const signIn: IAuthController["signIn"] = async (req, res, next) => {
     next(error);
   }
 };
-export default signIn;
+export default login;

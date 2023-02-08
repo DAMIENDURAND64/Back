@@ -1,0 +1,7 @@
+import getAll from "./handlers/getAll";
+import getOne from "./handlers/getOne";
+import update from "./handlers/update";
+import delete_ from "./handlers/delete";
+const controller = { getAll, getOne, update, delete_ };
+
+export default controller;

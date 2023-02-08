@@ -1,7 +1,7 @@
-import signUp from "./handlers/signup";
-import signIn from "./handlers/signin";
+import register from "./handlers/register";
+import login from "./handlers/login";
 import IAuthController from "./interface";
 
-const controller: IAuthController = { signIn, signUp };
+const controller: IAuthController = { login, register };
 
 export default controller;

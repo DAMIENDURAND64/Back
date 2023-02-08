@@ -1,11 +1,9 @@
 import { Router } from "express";
-import signin from "./handlers/signin";
-import signup from "./handlers/signup";
+import controller from "./controller";
 
-const router = Router()
+const router = Router();
 
-router.post("/signin", signin)
-router.post("/signup", signup)
+router.post("/login", controller.login);
+router.post("/register", controller.register);
 
-
-export default router
+export default router;
