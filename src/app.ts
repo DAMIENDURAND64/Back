@@ -1,35 +1,28 @@
 import express from "express";
-import { MongoClient } from "mongodb";
-import dotenv from "dotenv";
+import api from "./api";
+import connectDb from "./services/mongoose";
 
-dotenv.config();
+connectDb()
+  .then(() => console.log("Db connected"))
+  .catch((err) => console.log(err));
 
 const app = express();
 
-const client = new MongoClient(process.env.MONGO_URL as string);
-
-async function main() {
-  await client.connect();
-  console.log("connection OK");
-  const db = client.db("my_Test_to_StrategIn");
-  const collection = db.collection("users");
-  const insertUsers = await collection.insertMany([
-    { email: "aaa.zzz@gmail.com", password: "azerty" },
-    { email: "qqq.sss@gmail.com", password: "qwerty" },
-  ]);
-  console.log("users inseres =>", insertUsers);
-  return "done";
-}
-
-main()
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.send("Welcome to homePage");
-});
+app.use("/api/v1", api);
+
+/* app.get("/users", async (req, res) => {
+  console.log("ICI");
+  try {
+    const users = await User.find();
+    console.log(users);
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error });
+  }
+}); */
 
 export default app;
