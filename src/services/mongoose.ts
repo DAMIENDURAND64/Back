@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-connectDb().catch((err) => console.log(err));
+mongoose.set("strictQuery", false);
 
-async function connectDb() {
+const connectDb = async () => {
   const options = {
     autoIndex: false,
     maxPoolSize: 10,
@@ -16,6 +16,8 @@ async function connectDb() {
   await mongoose.connect(process.env.MONGO_URL as string, options).then(() => {
     console.log("Client connected");
   });
-}
+};
+
+connectDb().catch((err) => console.log(err));
 
 export default connectDb;

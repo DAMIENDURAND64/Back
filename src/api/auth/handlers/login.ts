@@ -6,8 +6,11 @@ import IAuthController from "../interface";
 
 const login: IAuthController["login"] = async (req, res, next) => {
   const { email, password } = req.body;
+
   try {
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email })
+      .setOptions({ sanitizeFilter: true })
+      .exec();
     if (!user) {
       return res.status(404).send({ message: "The username does not exist" });
     }
